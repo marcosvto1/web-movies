@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAllCategories() {
-    return this.prisma.category.findMany();
+  findAllCategories(limit: number) {
+    return this.prisma.category.findMany({ take: limit });
   }
 }
