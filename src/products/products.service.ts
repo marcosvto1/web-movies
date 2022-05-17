@@ -25,12 +25,12 @@ export class ProductsService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: number, includeCategory = true, includeImages = true) {
     return this.prisma.product.findFirst({
       where: { id },
       include: {
-        category: true,
-        images: true,
+        category: includeCategory,
+        images: includeImages,
       },
     });
   }
