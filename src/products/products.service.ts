@@ -18,6 +18,7 @@ export class ProductsService {
     return this.prisma.product.findMany({
       include: {
         category: true,
+        images: true,
       },
       where,
       take,
@@ -25,7 +26,13 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.prisma.product.findFirst({ where: { id } });
+    return this.prisma.product.findFirst({
+      where: { id },
+      include: {
+        category: true,
+        images: true,
+      },
+    });
   }
 
   private setFilters(filters: FindAllProductDTO) {

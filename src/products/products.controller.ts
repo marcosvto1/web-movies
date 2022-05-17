@@ -13,7 +13,15 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const product = await this.productsService.findOne(+id);
+    const relatedProduct = await this.productsService.findAll({
+      category_id: product.category_id,
+      limit: 4,
+    });
+    return {
+      ...product,
+      related_products: relatedProduct,
+    };
   }
 }
