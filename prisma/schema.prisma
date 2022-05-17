@@ -59,3 +59,14 @@ model ProductImage {
 
   @@map("product_image")
 }
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  name String
+  email String @unique
+  password String
+
+  @@map("customer")
+
+}

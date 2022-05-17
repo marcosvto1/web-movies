@@ -1,5 +1,4 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { query } from 'express';
 import { FindShippingDTO } from 'src/shippings/dto/find-shipping.dto';
 import { ShippingsService } from './shippings.service';
 
