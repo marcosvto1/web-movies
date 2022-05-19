@@ -4,7 +4,11 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Get,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 
@@ -27,5 +31,11 @@ export class CustomersController {
       );
     }
     await this.customersService.create(createCustomerDto);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@Request() request) {
+    return request.user;
   }
 }
