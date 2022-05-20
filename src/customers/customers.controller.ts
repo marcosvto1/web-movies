@@ -38,4 +38,13 @@ export class CustomersController {
   me(@Request() request) {
     return request.user;
   }
+
+  @Get('orders')
+  @UseGuards(JwtAuthGuard)
+  async orders(@Request() request) {
+    const { orders } = await this.customersService.findCustomerOrders(
+      request.user.id,
+    );
+    return orders;
+  }
 }
