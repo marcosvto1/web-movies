@@ -8,8 +8,12 @@ import {
   UseGuards,
   Request,
   Param,
+  Patch,
 } from '@nestjs/common';
+import { userInfo } from 'os';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UpdateCustomerDTO } from 'src/customers/dto/update-customer.dto';
+import { UpdatePasswordDTO } from 'src/customers/dto/update-password.dto';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 
@@ -37,6 +41,7 @@ export class CustomersController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   me(@Request() request) {
+    delete request.user.iat;
     return request.user;
   }
 
@@ -52,7 +57,34 @@ export class CustomersController {
   @Get('orders/:id')
   @UseGuards(JwtAuthGuard)
   async findOrderById(@Param('id') id, @Request() request) {
-    console.log(id);
     return this.customersService.findOneOrderByCustomer(request.user.id, +id);
+  }
+
+  @Patch('update-profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(
+    @Request() request,
+    @Body() updateCustomerDTO: UpdateCustomerDTO,
+  ) {
+    const { password, ...customer } =
+      await this.customersService.updateCustomer(
+        request.user.id,
+        updateCustomerDTO,
+      );
+    return customer;
+  }
+
+  @Patch('update-password')
+  @UseGuards(JwtAuthGuard)
+  async updatePassword(
+    @Request() request,
+    @Body() updatePasswordDTO: UpdatePasswordDTO,
+  ) {
+    const { password, ...customer } =
+      await this.customersService.updatePassword(
+        request.user.id,
+        updatePasswordDTO,
+      );
+    return customer;
   }
 }

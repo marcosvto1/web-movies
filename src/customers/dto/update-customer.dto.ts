@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateCustomerDto } from './create-customer.dto';
+import { PickType } from '@nestjs/swagger';
+import { Customer } from 'src/customers/entities/customer.entity';
 
-export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}
+export class UpdateCustomerDTO extends PickType(Customer, ['name']) {}
