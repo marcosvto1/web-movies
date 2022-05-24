@@ -7,6 +7,7 @@ import {
   Get,
   UseGuards,
   Request,
+  Param,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CustomersService } from './customers.service';
@@ -41,10 +42,17 @@ export class CustomersController {
 
   @Get('orders')
   @UseGuards(JwtAuthGuard)
-  async orders(@Request() request) {
+  async findOrders(@Request() request) {
     const { orders } = await this.customersService.findCustomerOrders(
       request.user.id,
     );
     return orders;
+  }
+
+  @Get('orders/:id')
+  @UseGuards(JwtAuthGuard)
+  async findOrderById(@Param('id') id, @Request() request) {
+    console.log(id);
+    return this.customersService.findOneOrderByCustomer(request.user.id, +id);
   }
 }

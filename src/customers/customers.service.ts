@@ -51,4 +51,20 @@ export class CustomersService {
       },
     });
   }
+
+  findOneOrderByCustomer(customerId: number, orderId: number) {
+    return this.prismaService.order.findFirst({
+      where: {
+        customer_id: customerId,
+        id: orderId,
+      },
+      include: {
+        products: {
+          select: {
+            product: true,
+          },
+        },
+      },
+    });
+  }
 }
