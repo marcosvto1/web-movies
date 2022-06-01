@@ -34,7 +34,7 @@ export class PagSeguroService {
 
     return {
       orderId: jsonData.transaction.reference._text,
-      status: OrderStatusMap.get(jsonData.transaction.status._text),
+      status: OrderStatusMap.get(+jsonData.transaction.status._text),
     };
   }
 
