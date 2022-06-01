@@ -34,6 +34,7 @@ export class OrdersController {
       const checkoutURL = await this.pagSeguroService.generateCheckoutURL(
         newOrder,
       );
+      console.log(checkoutURL);
       return res.redirect(checkoutURL);
     } catch (error) {
       console.log(error);
