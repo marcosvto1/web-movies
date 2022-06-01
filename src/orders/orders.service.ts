@@ -31,4 +31,15 @@ export class OrdersService {
       },
     });
   }
+
+  public updateOrderStatus({ orderId, status }) {
+    return this.prismaService.order.update({
+      where: {
+        id: +orderId,
+      },
+      data: {
+        status,
+      },
+    });
+  }
 }

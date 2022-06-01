@@ -1,15 +1,42 @@
-import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Response,
+} from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { PagSeguroService } from 'src/pagseguro/pagseguro.service';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly pagSeguroService: PagSeguroService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Request() request, @Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(request.user.id, createOrderDto);
+  async create(
+    @Request() request,
+    @Body() createOrderDto: CreateOrderDto,
+    @Response() res,
+  ) {
+    const newOrder = await this.ordersService.create(
+      request.user.id,
+      createOrderDto,
+    );
+
+    try {
+      const checkoutURL = await this.pagSeguroService.generateCheckoutURL(
+        newOrder,
+      );
+      return res.redirect(checkoutURL);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

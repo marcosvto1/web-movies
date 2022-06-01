@@ -10,8 +10,11 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
+    console.log(email, password);
     const customerFound = await this.customersService.findOneByEmail(email);
-    console.log(password, customerFound.password);
+    console.log(
+      this.customersService.comparePassword(password, customerFound.password),
+    );
     if (
       customerFound &&
       this.customersService.comparePassword(password, customerFound.password)
