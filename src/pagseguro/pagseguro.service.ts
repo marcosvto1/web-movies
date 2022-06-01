@@ -26,6 +26,7 @@ export class PagSeguroService {
     const url = `${process.env.PAGSEGURO_WS_URL}/v3/transactions/notifications/${notificationCode}?email=${process.env.PAGSEGURO_EMAIL}&token=${process.env.PAGSEGURO_TOKEN}`;
 
     const response = await axios.get(url);
+    console.log(response.data);
 
     const jsonData = JSON.parse(
       xmlService.xml2json(response.data, { compact: true }),
